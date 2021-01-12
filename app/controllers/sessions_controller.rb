@@ -3,14 +3,14 @@ class SessionsController < ApplicationController
   
   def create
     user = User.find_by(email: params[:session][:email].downcase)
-    respond_to do |format|
-      if user&.authenticate(params[:session][:password])
-        log_in user
-        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-        format.html { redirect_to user, notice: 'Login was successfully.' }
-      else
-        format.html { render :new, notice: 'Login was failed.' }
-      end
+    if user&.authenticate(params[:session][:password])
+      log_in user
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      flash[:notice] = 'Login was successful'
+      redirect_back_or user
+    else
+      flash[:notice] = 'Login was failed.'
+      render :new
     end
   end
 
