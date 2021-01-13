@@ -20,3 +20,14 @@ module SampleApp
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end
+
+# Version of your assets, change this if you want to expire all your assets
+# Loads environment variables from file config/local_env.yml
+# access vars using ENV['VAR_NAME']
+
+env_file = File.join(Rails.root, 'config', 'local_env.yml')
+if File.exist?(env_file)
+    YAML.load(File.open(env_file)).each do |key, value|
+      ENV[key.to_s] = value
+    end
+end
